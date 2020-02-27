@@ -1,0 +1,52 @@
+@charset 'utf-8';
+
+/// Módulo para gerar classes e helpers através das paletas de cores
+/// @author Lucas Teixeira
+/// 
+/// @group Tools
+/// @require {variable} $colors
+
+
+/// Esta função retorna a cor escolhida da paleta de cores
+///
+/// @access public
+/// @param {color} $color - A cor desejada
+/// @param {variants} $variants - As variações das cores
+/// @return {color} - A cor desejada
+///
+/// @example scss - Uso
+///
+/// .foo {
+///   color: color(indigo, light);
+/// }
+///
+/// @example css - compilado
+///
+/// .foo {
+///   color: #c5cae9;
+/// }
+///
+
+@function colors($color, $variants) {
+  $color: map-deep-get($colors, $color, $variants);
+  @return $color;
+}
+
+// Fazendo setup das classes cores e do background e acordo com a paleta
+@each $color, $variants in $colors {
+  $lenght: length($variants);
+
+  @for $i from 1 through $lenght {
+    $variantskey: map-keys($variants);
+    $variantskey: nth($variantskey, $i);
+    $colors-set: nth(map-values($variants), $i);
+
+    .bg-#{$color}-#{$variantskey} {
+      background-color: $colors-set;
+    }
+
+    .text-color-#{$color}-#{$variantskey} {
+      color: $colors-set;
+    }
+  }
+}
